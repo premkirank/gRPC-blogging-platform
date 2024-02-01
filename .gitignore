@@ -1,0 +1,25 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Output of the go coverage tool
+*.out
+
+# Environment configuration file
+.env
+
+# Log files
+*.log
+
+# macOS
+.DS_Store
+
+# Go-specific
+.idea/
+.vscode/
+
+# Exclude vendored dependencies
+vendor/
