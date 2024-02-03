@@ -2,11 +2,14 @@ syntax = "proto3";
 
 package blog;
 
+import "google/protobuf/empty.proto";
+
 option go_package = "/blog";
 
 service BlogService {
   rpc CreatePost(CreatePostRequest) returns (PostResponse);
   rpc ReadPost(ReadPostRequest) returns (PostResponse);
+  rpc ReadAllPosts(google.protobuf.Empty) returns (AllPostsResponse);
   rpc UpdatePost(UpdatePostRequest) returns (PostResponse);
   rpc DeletePost(DeletePostRequest) returns (DeleteResponse);
 }
@@ -23,6 +26,9 @@ message ReadPostRequest {
   string post_id = 1;
 }
 
+message ReadAllPostsRequest {
+}
+
 message UpdatePostRequest {
   string post_id = 1;
   string title = 2;
@@ -33,6 +39,10 @@ message UpdatePostRequest {
 
 message DeletePostRequest {
   string post_id = 1;
+}
+
+message AllPostsResponse {
+  repeated PostResponse posts = 1;
 }
 
 message PostResponse {

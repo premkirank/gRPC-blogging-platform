@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"log"
 
 	pb "gRPC-blogging-platform/blog"
@@ -45,6 +46,14 @@ func main() {
 	}
 
 	log.Printf("Post read: %v", readPostRes)
+
+	// Read All Posts
+	readAllPostsRes, err := c.ReadAllPosts(context.Background(), &emptypb.Empty{})
+	if err != nil {
+		log.Fatalf("could not read post: %v", err)
+	}
+
+	log.Printf("Posts read: %v", readAllPostsRes)
 
 	// Update Post
 	updatePostReq := &pb.UpdatePostRequest{

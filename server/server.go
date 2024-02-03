@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"log"
 	"net"
 
 	pb "gRPC-blogging-platform/blog"
+	"github.com/google/uuid"
 	"google.golang.org/grpc"
 )
 
@@ -17,7 +19,8 @@ type server struct {
 var posts = make(map[string]*pb.PostResponse)
 
 func (s *server) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.PostResponse, error) {
-	postID := fmt.Sprintf("%d", len(posts)+1)
+	//postID := fmt.Sprintf("%d", len(posts)+1)
+	postID := fmt.Sprintf("%v", uuid.New())
 	post := &pb.PostResponse{
 		PostId:          postID,
 		Title:           req.Title,
@@ -38,6 +41,24 @@ func (s *server) ReadPost(ctx context.Context, req *pb.ReadPostRequest) (*pb.Pos
 	}
 
 	return post, nil
+}
+
+func (s *server) ReadAllPosts(ctx context.Context, req *emptypb.Empty) (*pb.AllPostsResponse, error) {
+	var allPostsResponse = pb.AllPostsResponse{}
+	allPosts := make([]*pb.PostResponse, 0)
+
+	for _, post := range posts {
+		if allPosts != nil {
+			allPosts = append(allPosts, post)
+		}
+	}
+
+	if posts == nil {
+		return nil, fmt.Errorf("no posts found")
+	}
+
+	allPostsResponse.Posts = allPosts
+	return &allPostsResponse, nil
 }
 
 func (s *server) UpdatePost(ctx context.Context, req *pb.UpdatePostRequest) (*pb.PostResponse, error) {
